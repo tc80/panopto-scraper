@@ -35,7 +35,7 @@ results = [(l.find_elements_by_class_name('detail-title')[0].find_elements_by_ta
             [0].get_attribute('innerHTML'), l.get_attribute('id')) for l in lecs]
 
 for i, (title, uuid) in enumerate(results):
-    print(f"({i+1}/{len(results)}) Downloading {title}...", end='')
+    print(f"({i+1}/{len(results)}) Downloading '{title}'...", end='')
     p = f'{dirname}/{title}.mp4'
     if os.path.exists(p):
         print("exists")
