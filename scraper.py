@@ -35,18 +35,19 @@ results = [(l.find_elements_by_class_name('detail-title')[0].find_elements_by_ta
             [0].get_attribute('innerHTML'), l.get_attribute('id')) for l in lecs]
 
 for i, (title, uuid) in enumerate(results):
-    print(f"({i+1}/{len(results)}) Downloading {title}...")
+    print(f"({i+1}/{len(results)}) Downloading {title}...", end='')
+    p = f'{dirname}/{title}.mp4'
+    if os.path.exists(p):
+        print("exists")
+        continue
     vid_url = f"{res[0]}{PANOPTO}Podcast/Social/{uuid}.mp4"
     driver.get(vid_url)
     download_url = driver.find_elements_by_tag_name(
         'source')[0].get_attribute('src')
     resp = requests.get(download_url)
-    p = f'{dirname}/{title}.mp4'
-    if os.path.exists(p):
-        print(f"({i+1}/{len(results)}) '{p}' exists, ignoring download...")
-        continue
     with open(p, 'wb') as f:
         f.write(resp.content)
+    print("ok")
 
 driver.quit()
 print("Done!")
