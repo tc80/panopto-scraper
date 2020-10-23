@@ -45,9 +45,12 @@ for i, (title, uuid) in enumerate(results):
     download_url = driver.find_elements_by_tag_name(
         'source')[0].get_attribute('src')
     resp = requests.get(download_url)
-    with open(p, 'wb') as f:
-        f.write(resp.content)
-    print("ok")
+    try:
+        with open(p, 'wb') as f:
+            f.write(resp.content)
+        print("ok")
+    except:
+        print(f"fail: {sys.exc_info()[0]}")
 
 driver.quit()
 print("Done!")
