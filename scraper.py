@@ -9,48 +9,54 @@ if len(sys.argv) <= 1:
     exit(1)
 
 PANOPTO = "/Panopto/"
-url = sys.argv[1]
-res = url.split(PANOPTO)
-
-if len(res) != 2:
-    print("Invalid url.")
-    exit(1)
-
 driver = webdriver.Chrome()
-driver.get(url)
 
-# TODO: cache cookies
-input("Press enter after logging in...")
+args = len(sys.argv[1:])
+login = True
+for i, url in enumerate(sys.argv[1:]):
+    res = url.split(PANOPTO)
 
-dirname = driver.find_element_by_id(
-    'contentHeaderText').get_attribute('innerHTML')
-
-if not os.path.exists(dirname):
-    os.makedirs(dirname)
-
-lecs = driver.find_element_by_id(
-    'detailsTable').find_elements_by_css_selector('.thumbnail-row.draggable')
-
-results = [(l.find_elements_by_class_name('detail-title')[0].find_elements_by_tag_name('span')
-            [0].get_attribute('innerHTML'), l.get_attribute('id')) for l in lecs]
-
-for i, (title, uuid) in enumerate(results):
-    print(f"({i+1}/{len(results)}) Downloading '{title}'...", end='')
-    p = f'{dirname}/{title}.mp4'
-    if os.path.exists(p):
-        print("exists")
+    if len(res) != 2:
+        print(f"({i+1}/{args}) Invalid url, skipping...")
         continue
-    vid_url = f"{res[0]}{PANOPTO}Podcast/Social/{uuid}.mp4"
-    driver.get(vid_url)
-    download_url = driver.find_elements_by_tag_name(
-        'source')[0].get_attribute('src')
-    resp = requests.get(download_url)
-    try:
-        with open(p, 'wb') as f:
-            f.write(resp.content)
-        print("ok")
-    except:
-        print(f"fail: {sys.exc_info()[0]}")
+
+    driver.get(url)
+
+    if login:
+        # TODO: cache cookies
+        input("Press enter after logging in...")
+        login = False
+
+    dirname = driver.find_element_by_id(
+        'contentHeaderText').get_attribute('innerHTML')
+
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+
+    lecs = driver.find_element_by_id(
+        'detailsTable').find_elements_by_css_selector('.thumbnail-row.draggable')
+
+    results = [(l.find_elements_by_class_name('detail-title')[0].find_elements_by_tag_name('span')
+                [0].get_attribute('innerHTML'), l.get_attribute('id')) for l in lecs]
+
+    # TODO: concurrent download
+    for j, (title, uuid) in enumerate(results):
+        print(f"({i+1}/{args} {j+1}/{len(results)}) Downloading '{title}'...", end='')
+        p = f'{dirname}/{title}.mp4'
+        if os.path.exists(p):
+            print("exists")
+            continue
+        vid_url = f"{res[0]}{PANOPTO}Podcast/Social/{uuid}.mp4"
+        driver.get(vid_url)
+        download_url = driver.find_elements_by_tag_name(
+            'source')[0].get_attribute('src')
+        resp = requests.get(download_url)
+        try:
+            with open(p, 'wb') as f:
+                f.write(resp.content)
+            print("ok")
+        except:
+            print(f"fail: {sys.exc_info()[0]}")
 
 driver.quit()
 print("Done!")

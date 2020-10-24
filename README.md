@@ -18,7 +18,7 @@ pip3 install selenium
 To run:
 
 ```
-python3 scraper.py <url of Panopto folder>
+python3 scraper.py <url of Panopto folder 1> <url of Panopto folder 2> ... <url of Panopto folder n>
 ```
 
 For example:
@@ -27,4 +27,4 @@ For example:
 python3 scraper.py "https://st-andrews.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%224e1b0a53-e3da-4240-8cae-ud0870a9uc6d%22&maxResults=250"
 ```
 
-Once the program starts, you simply need to login to Panopto in the Chrome window that opens and then press `enter` to notify the program to continue. Only the results displayed on the first page of the folder will be scraped.
+Once the program starts, you simply need to login to Panopto in the Chrome window that opens and then press `enter` to notify the program to continue. Only the results displayed on the first page of each respective folder will be scraped. It is assumed that the login credentials are valid for all folders provided.
