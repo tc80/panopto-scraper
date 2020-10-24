@@ -1,6 +1,7 @@
 import sys
 import os
 import requests
+import time
 from selenium import webdriver
 
 if len(sys.argv) <= 1:
@@ -21,6 +22,8 @@ for i, url in enumerate(sys.argv[1:]):
         continue
 
     driver.get(url)
+    driver.refresh()
+    time.sleep(1)
 
     if login:
         # TODO: cache cookies
