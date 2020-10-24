@@ -27,6 +27,8 @@ for i, url in enumerate(sys.argv[1:]):
         input("Press enter after logging in...")
         login = False
 
+    print(f"({i+1}/{args}) Processing...")
+
     dirname = driver.find_element_by_id(
         'contentHeaderText').get_attribute('innerHTML')
 
@@ -41,7 +43,8 @@ for i, url in enumerate(sys.argv[1:]):
 
     # TODO: concurrent download
     for j, (title, uuid) in enumerate(results):
-        print(f"({i+1}/{args} {j+1}/{len(results)}) Downloading '{title}'...", end='')
+        print(f"({i+1}/{args} {j+1}/{len(results)}) Downloading '{title}'...",
+              end='', flush=True)
         p = f'{dirname}/{title}.mp4'
         if os.path.exists(p):
             print("exists")
