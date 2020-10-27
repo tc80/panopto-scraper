@@ -3,7 +3,7 @@ Scrapes videos from [Panopto](https://www.panopto.com/) folders.
 
 # Dependencies
 1) Install [Chrome](https://www.google.com/chrome/)
-2) Install [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) and include in your `PATH`. 
+2) Install [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) and include it in your `PATH`. 
 
 On macOS, run:
 ```
